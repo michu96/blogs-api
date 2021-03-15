@@ -1,16 +1,16 @@
 {
-  "name": "blogs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "devStart": "nodemon index.js"
-  },
-  "author": "Michal Trudzinski",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.12.0"
-  }
+    "name": "blogs",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "devStart": "nodemon index.js"
+    },
+    "author": "Michal Trudzinski",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mongoose": "^5.12.0"
+    }
 }
