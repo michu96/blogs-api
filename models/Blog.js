@@ -31,6 +31,7 @@ const blogSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         required: true,
+        immutable: true,
     },
     updatedAt: {
         type: Date,
