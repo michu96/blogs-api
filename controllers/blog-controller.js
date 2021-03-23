@@ -42,9 +42,14 @@ const blogController = {
     })
     try {
       await blog.save()
-      res.send({ msg: 'Created new blog', blog })
+      res.status(201).send({ msg: 'Created new blog', blog })
     } catch (err) {
-      res.status(400).send({ error: 'Something went wrong' })
+      if (err.errors) {
+        res.status(400).send({ errors: err.errors })
+        return
+      }
+      console.log(err)
+      res.status(500).send({ error: 'Internal server error. Try again later.' })
     }
   },
   edit: async (req, res) => {
