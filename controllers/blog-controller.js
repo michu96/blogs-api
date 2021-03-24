@@ -1,4 +1,22 @@
+const multer = require('multer')
+const jimp = require('jimp')
+const fs = require('fs')
 const Blog = require('../models/Blog')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}.${file.originalname.split('.')[1]}`
+    )
+  },
+})
+const upload = multer({
+  storage: storage,
+})
 
 const blogController = {
   read: async (req, res) => {
@@ -31,9 +49,22 @@ const blogController = {
     }
   },
   insert: async (req, res) => {
+    console.log(req.file)
+    if (!req.file) {
+      res.status(400).send({ errors: { image: 'Image is required' } })
+      return
+    }
     const now = Date.now()
     const blog = new Blog({
       title: req.body.title,
+      img: {
+        data: fs.readFileSync(`uploads/${req.file.filename}`),
+        contentType: req.file.mimetype,
+      },
+      smImg: {
+        data: fs.readFileSync(`uploads/sm-${req.file.filename}`),
+        contentType: req.file.mimetype,
+      },
       shortDescription: req.body.shortDescription,
       description: req.body.description,
       author: req.body.author,
@@ -99,6 +130,27 @@ const blogController = {
         error: 'Invalid format of ID. Expected ObjectId',
       })
     }
+  },
+  uploadImg: upload.single('image'),
+  resizeImg: (req, res, next) => {
+    if (!req.file) {
+      res
+        .status(400)
+        .send({ errors: { image: 'Cannot resize. Image is missing' } })
+      return
+    }
+    jimp
+      .read(`uploads/${req.file.filename}`)
+      .then((img) => {
+        img.resize(jimp.AUTO, 250)
+        img.write(`uploads/sm-${req.file.filename}`, () => {
+          next()
+        })
+      })
+      .catch((err) => {
+        res.status(500).send({ error: '500 Internal Server Error' })
+        return
+      })
   },
 }
 
