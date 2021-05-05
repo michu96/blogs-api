@@ -16,6 +16,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   res.send('<h1>Home page</h1>')

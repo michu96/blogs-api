@@ -8,6 +8,14 @@ const blogSchema = new mongoose.Schema({
     minLength: [5, 'Title must be at least 5 characters long'],
     maxLength: [100, 'Title cannot be longer than 100 characters'],
   },
+  img: {
+    data: Buffer,
+    contentType: String,
+  },
+  smImg: {
+    data: Buffer,
+    contentType: String,
+  },
   shortDescription: {
     type: String,
     trim: true,
